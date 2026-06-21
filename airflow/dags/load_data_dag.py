@@ -37,6 +37,16 @@ def clean_load_data():
         sql="CALL load_fact_transactions();"
     )
 
-    [load_users, load_tariffs, load_promocodes] >> load_transactions
+    @task.bash(
+            cwd="/opt/airflow/dags/sql_scripts"
+    )
+    def test_data():
+        return 'psql "postgresql://postgres:postgres@my_postgres:5432/project_db" '\
+        '-f run_all_tests.sql'
+
+    test = test_data()
+
+    load_users >> load_tariffs >> load_promocodes >> load_transactions >> \
+    test
 
 clean_load_data() 

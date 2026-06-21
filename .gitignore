@@ -6,3 +6,7 @@ airflow/logs/*
 !airflow/logs/.gitkeep
 servers.json
 sql_scripts/PC/*
+airflow/dags/x_*
+airflow/dags/test_dag.py
+sql_scripts/run_tests_ps.ps1
+sql_scripts/db_init.sql

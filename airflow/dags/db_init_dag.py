@@ -81,9 +81,21 @@ def db_init_dag():
         "procedure_stg_fact_transactions_to_fact_transactions.sql"
     )
 
+    insert = SQLExecuteQueryOperator(
+        task_id="insert_all", 
+        conn_id="my_postgres_conn", 
+        sql="./sql_scripts/insert_all_dim_fact.sql"
+    )
+
+    comments = SQLExecuteQueryOperator(
+        task_id="create_comments",
+        conn_id="my_postgres_conn", 
+        sql="./sql_scripts/docs.sql"
+    )
+
     is_postgres_up >> create_bronze >> [create_silver, create_log] >> \
     create_gold >> [dates_procedure, users_procedure, \
-    tariffs_procedure, promocodes_procedure, transactions_procedure]
+    tariffs_procedure, promocodes_procedure, transactions_procedure] >> \
+    comments >> insert
     
-
 db_init_dag()   

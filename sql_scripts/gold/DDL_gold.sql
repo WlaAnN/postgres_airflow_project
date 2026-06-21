@@ -2,7 +2,7 @@ DROP VIEW IF EXISTS v_by_tariff_mart CASCADE;
 DROP VIEW IF EXISTS v_by_promocode_mart CASCADE;
 DROP VIEW IF EXISTS v_by_month_mart CASCADE;
 DROP VIEW IF EXISTS v_by_year_mart CASCADE;
-DROP VIEW IF EXISTS v_by_quarter CASCADE;
+DROP VIEW IF EXISTS v_by_quarter_mart CASCADE;
 DROP VIEW IF EXISTS v_by_week_mart CASCADE;
 DROP VIEW IF EXISTS v_by_day_mart CASCADE;
 DROP VIEW IF EXISTS v_summary_mart CASCADE;
@@ -114,7 +114,7 @@ GROUP BY date_year
 ORDER BY date_year
 );
 
-CREATE VIEW v_by_quarter AS(
+CREATE VIEW v_by_quarter_mart AS(
 SELECT
 	date_year,
 	date_quarter,
