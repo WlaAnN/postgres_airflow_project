@@ -1,0 +1,32 @@
+# Создайте свой servers.json для автоматического подключения
+# к сереверу по этому шаблону
+
+# ОБЯЗАТЕЛЬНО УДАЛИТЕ ВСЕ КОММЕНТАРИИ!!!
+
+{
+    "Servers":{
+        "1":{
+            #Можно менять 
+            "Name":"Project_Server",
+
+            "Group":"Servers",
+
+             #Оставить, если не меняете имя контейнера
+            "Host":"my_postgres",
+
+            #Оставить
+            "Port":5432,
+
+            #Оставить
+            "MaintenanceDB":"project_db", 
+
+            #В зависимотсти от вашего .env
+            "Username":"postgres",
+            "Password":"postgres",
+
+            #Оставить
+            "SSLMode":"prefer"
+        }
+    }
+}
+

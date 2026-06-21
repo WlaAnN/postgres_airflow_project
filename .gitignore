@@ -1,0 +1,8 @@
+main.py
+.env
+.venv
+__pycache__
+airflow/logs/*
+!airflow/logs/.gitkeep
+servers.json
+sql_scripts/PC/*
