@@ -8,6 +8,10 @@ AS $$
 		start_time TIMESTAMP;
 		end_time TIMESTAMP;
 	BEGIN
+
+		EXECUTE 'SET LOCAL max_parallel_workers_per_gather = 0';
+    	EXECUTE 'SET LOCAL max_parallel_workers = 0';
+
 		SELECT
 			NOW()
 		INTO 
