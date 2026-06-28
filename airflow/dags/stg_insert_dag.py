@@ -3,6 +3,8 @@ from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
 from pendulum import datetime
 import pendulum
 from airflow.timetables.trigger import CronTriggerTimetable
+from airflow.providers.common.sql.sensors.sql import SqlSensor
+
 
 ufa_tz = pendulum.tz.timezone.FixedTimezone(5 * 3600)
 
@@ -12,6 +14,14 @@ ufa_tz = pendulum.tz.timezone.FixedTimezone(5 * 3600)
     start_date=datetime(year=2026, month=6, day=14, tz=ufa_tz)
 )
 def extract_data():
+
+    is_postgres_up = SqlSensor(
+        task_id="is_postgres_up",
+        conn_id="my_postgres_conn", 
+        sql='SELECT 1;',
+        timeout=180,
+        poke_interval=5
+    )
     
     extract_data_task = SQLExecuteQueryOperator(
         task_id="extract_data_task",
@@ -23,9 +33,10 @@ def extract_data():
     def check():
         print("Data extracted!")
 
-    first = extract_data_task
-    second = check()
+    first = is_postgres_up
+    second = extract_data_task
+    third = check()
 
-    first >> second
+    first >> second >> third
 
 extract_data()

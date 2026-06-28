@@ -3,6 +3,8 @@ from pendulum import datetime
 import pendulum
 from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
 from airflow.timetables.trigger import CronTriggerTimetable
+from airflow.providers.common.sql.sensors.sql import SqlSensor
+
 
 ufa_tz = pendulum.tz.timezone.FixedTimezone(5 * 3600)
 
@@ -12,6 +14,14 @@ ufa_tz = pendulum.tz.timezone.FixedTimezone(5 * 3600)
     start_date=datetime(year=2026, month=6, day=15, tz=ufa_tz)
 )
 def clean_load_data():
+
+    is_postgres_up = SqlSensor(
+        task_id="is_postgres_up",
+        conn_id="my_postgres_conn", 
+        sql='SELECT 1;',
+        timeout=180,
+        poke_interval=5
+    )
 
     load_users = SQLExecuteQueryOperator(
         task_id="load_users",
@@ -46,7 +56,8 @@ def clean_load_data():
 
     test = test_data()
 
-    load_users >> load_tariffs >> load_promocodes >> load_transactions >> \
+    is_postgres_up >> load_users >> load_tariffs >> \
+    load_promocodes >> load_transactions >> \
     test
 
 clean_load_data() 
